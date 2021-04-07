@@ -1,5 +1,6 @@
 package jeroquest.logic;
-
+import jeroquest.utils.DynamicVectorCharacters;
+import jeroquest.utils.Statistics;
 import jeroquest.boardgame.Board;
 import jeroquest.boardgame.Dice;
 import jeroquest.units.Barbarian;
@@ -20,11 +21,16 @@ import jeroquest.units.Mummy;
  */
 
 public class Game {
-	private Character characters[]; // characters in the game
+	private Statistics stats;
+	private DynamicVectorCharacters characters; // characters in the game
 	private Board board; // where the game takes place
 	private int currentRound; // current round
 	private int totalRounds; // maximum number of rounds to play
-
+	
+	public Statistics getStatistics() {
+		return this.stats;
+	}
+	
 	/**
 	 * Gets the total rounds of the game
 	 * 
@@ -53,6 +59,9 @@ public class Game {
 	 * @param totalRounds total number of rounds to play
 	 */
 	public Game(int numHeroes, int numMonsters, int rows, int columns, int totalRounds) {
+		// new stats
+		stats = new Statistics();
+		
 		// total number of rounds
 		setTotalRounds(totalRounds);
 
@@ -60,21 +69,21 @@ public class Game {
 		board = new Board(rows, columns);
 
 		// create the characters
-		characters = new Character[numHeroes + numMonsters];
+		characters = new DynamicVectorCharacters();
 
 		// random heroes
 		for (int x = 0; x < numHeroes; x++)
 			if (Dice.roll() % 2 == 0)// if even create a barbarian
-				characters[x] = new Barbarian("Barbarian" + x, "<NoPlayer>");
+				characters.add(new Barbarian("Barbarian" + x, "<NoPlayer>"));
 			else // if odd create a Dwarf
-				characters[x] = new Dwarf("Dwarf" + x, "<NoPlayer>");
+				characters.add(new Dwarf("Dwarf" + x, "<NoPlayer>"));
 
 		// random monsters
 		for (int y = 0; y < numMonsters; y++)
 			if (Dice.roll() % 2 == 0)// if even create a mummy
-				characters[numHeroes + y] = new Mummy("Mummy" + y);
+				characters.add(new Mummy("Mummy" + y));
 			else // if odd create a goblin
-				characters[numHeroes + y] = new Goblin("Goblin" + y);
+				characters.add(new Goblin("Goblin" + y));
 
 		// first round
 		currentRound = 1;
@@ -103,8 +112,8 @@ public class Game {
 	 * 
 	 * @return array with the character of the game
 	 */
-	public Character[] getCharacters() {
-		return characters;
+	public DynamicVectorCharacters getCharacters() {
+		return this.characters;
 	}
 
 	/**
@@ -115,7 +124,7 @@ public class Game {
 	public Board getBoard() {
 		return board;
 	}
-
+	
 	/**
 	 * Generate a printable version of the object as String (Overridden method)
 	 * 
@@ -124,11 +133,27 @@ public class Game {
 	@Override
 	public String toString() {
 		String s = "";
-		for (int x = 0; x < characters.length; x++) {
-			s += String.format("%s\n", characters[x]);
+		for (int x = 0; x < characters.length(); x++) {
+			s += String.format("%s\n", characters.vectorNormal()[x]);
 		}
 		s += getBoard();
 		return s;
+	}
+	
+	/**
+	 * Shuffles all characters in the Game vector
+	 * 
+	 * @return DynamicVectorCharacters (shuffled)
+	 */
+	public DynamicVectorCharacters shuffle () {
+		Character memory;
+		for (int i=0;i<getCharacters().length();i++) {
+			int position = Dice.roll(getCharacters().length())-1;
+			memory = getCharacters().get(position);
+			getCharacters().set(position, getCharacters().get(i));
+			getCharacters().set(i,memory);
+		}
+		return getCharacters();
 	}
 
 }

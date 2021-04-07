@@ -218,9 +218,20 @@ public abstract class Character implements Piece, GraphicElement {
 	 * @param currentGame the current game
 	 */
 	public void combat(Character c, Game currentGame) { // attacks to c and c defends itself
-		c.defend(this.attack());
+		int damage = this.attack();
+		int damageDealt = c.defend(damage);
+		
+		if (this instanceof Hero) {
+			currentGame.getStatistics().increaseHD(damageDealt);
+			currentGame.getStatistics().increaseHA();
+		} else {
+			currentGame.getStatistics().increaseMD(damageDealt);
+			currentGame.getStatistics().increaseMA();
+		}
+		
 		if (!c.isAlive()) {
 			currentGame.getBoard().removePiece(c);
+			currentGame.getCharacters().remove(currentGame.getCharacters().position(c));
 		}
 	}
 
@@ -264,6 +275,7 @@ public abstract class Character implements Piece, GraphicElement {
 			}
 			System.out.println(
 					this.getName() + this.getPosition() + " attacks to " + target.getName() + target.getPosition());
+			
 			this.combat(target, currentGame);
 			return true;
 		}
@@ -288,6 +300,7 @@ public abstract class Character implements Piece, GraphicElement {
 			mov--;
 			System.out.println(this.getPosition());
 
+			System.out.print(currentGame);
 			// window
 			Jeroquest.showGame();
 			MyKeyboard.pressEnter();
@@ -298,6 +311,7 @@ public abstract class Character implements Piece, GraphicElement {
 		if (Jeroquest.blocked(currentGame, this))
 			System.out.print("<<<BLOCKED");
 		System.out.println();
+		System.out.print(currentGame);
 		// window
 		Jeroquest.showGame();
 		MyKeyboard.pressEnter();
@@ -312,12 +326,24 @@ public abstract class Character implements Piece, GraphicElement {
 	 * @param currentGame game in which the character has to act
 	 */
 	public void resolveTurn(Game currentGame) {
-
-		// Attack to a random enemy
-		actionCombat(currentGame);
-
-		// Move randomly through the board
-		actionMovement(currentGame);
+		
+		if (this instanceof Hero) {
+			// Move randomly through the board
+			actionMovement(currentGame);
+					
+			while (validTargets(currentGame)==null) {
+				// Move randomly through the board
+				actionMovement(currentGame);
+			}
+			// Attack to a random enemy
+			actionCombat(currentGame);
+		} else {
+			// Attack to a random enemy
+			actionCombat(currentGame);
+			// Move randomly through the board
+			actionMovement(currentGame);
+		}
+		
 
 		// Possibles improvement (among others):
 		// - Move towards the closest enemy / with less body points /...
@@ -340,12 +366,12 @@ public abstract class Character implements Piece, GraphicElement {
 		// search targets
 		DynamicVectorCharacters validTargets = new DynamicVectorCharacters();
 
-		for (int i=0;i<currentGame.getCharacters().length;i++) {
-			if (currentGame.getCharacters()[i].isAlive() &&
-				isEnemy(currentGame.getCharacters()[i]) &&
-				isAtRange(currentGame.getCharacters()[i].getPosition())) {
+		for (int i=0;i<currentGame.getCharacters().length();i++) {
+			if (currentGame.getCharacters().get(i).isAlive() &&
+				isEnemy(currentGame.getCharacters().get(i)) &&
+				isAtRange(currentGame.getCharacters().get(i).getPosition())) {
 				
-					validTargets.add(currentGame.getCharacters()[i]);
+					validTargets.add(currentGame.getCharacters().get(i));
 			}
 		}
 

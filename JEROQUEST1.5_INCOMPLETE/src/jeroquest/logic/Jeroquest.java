@@ -9,6 +9,7 @@ import jeroquest.gui.MyKeyboard;
 import jeroquest.units.Character;
 import jeroquest.units.Hero;
 import jeroquest.units.Monster;
+import jeroquest.utils.Statistics;
 
 /**
  * Programming Methodology Practice. Jeroquest - An example of Object Oriented
@@ -62,6 +63,8 @@ public class Jeroquest {
 			monitor.showGame();
 			MyKeyboard.pressEnter();
 
+			//Shuffle Characters
+			currentGame.shuffle();
 			// increment round
 			nextRound();
 		}
@@ -69,6 +72,7 @@ public class Jeroquest {
 		// CONSOLE - show the end of the game
 		System.out.println("END OF THE GAME");
 		System.out.println("Winners: " + highestBody());
+		System.out.println(currentGame.getStatistics());
 
 		MyKeyboard.pressEnter();
 
@@ -117,8 +121,8 @@ public class Jeroquest {
 	private void resolveRound() {
 		System.out.println("Round: " + currentGame.getCurrentRound());
 
-		for (int x = 0; (x < currentGame.getCharacters().length) && opponentsLeft(); x++) {
-			Character c = currentGame.getCharacters()[x];
+		for (int x = 0; (x < currentGame.getCharacters().length()) && opponentsLeft(); x++) {
+			Character c = currentGame.getCharacters().get(x);
 			if (c.isAlive())
 				c.resolveTurn(currentGame);
 		}
@@ -132,7 +136,7 @@ public class Jeroquest {
 		int rows = currentGame.getBoard().getRows();
 		int columns = currentGame.getBoard().getColumns();
 
-		for (Character p : currentGame.getCharacters()) {
+		for (Character p : currentGame.getCharacters().vectorNormal()) {
 			// search a random position inside of the board
 			int row = Dice.roll(rows) - 1;
 			int col = Dice.roll(columns) - 1;
@@ -155,7 +159,7 @@ public class Jeroquest {
 		int cHeroes = 0;
 		int cMonsters = 0;
 
-		for (Character c : currentGame.getCharacters()) {
+		for (Character c : currentGame.getCharacters().vectorNormal()) {
 			if (c instanceof Hero)
 				cHeroes += c.getBody();
 			else if (c instanceof Monster)
@@ -180,13 +184,13 @@ public class Jeroquest {
 		boolean heroesAlive = false;
 		boolean monstersAlive = false;
 		int x = 0;
-		while ((x < currentGame.getCharacters().length) && !(heroesAlive && monstersAlive)) {
-			if (currentGame.getCharacters()[x].isAlive())
-				if (currentGame.getCharacters()[x] instanceof Hero)
+		while ((x < currentGame.getCharacters().length()) && !(heroesAlive && monstersAlive)) {
+			if (currentGame.getCharacters().get(x).isAlive())
+				if (currentGame.getCharacters().get(x) instanceof Hero)
 					heroesAlive = true;
 				else // this second if is necessary since there can be "neutral" characters (they
 						// don't inherit neither from Monster nor from Hero)
-				if (currentGame.getCharacters()[x] instanceof Monster)
+				if (currentGame.getCharacters().get(x) instanceof Monster)
 					monstersAlive = true;
 			x++;
 		}

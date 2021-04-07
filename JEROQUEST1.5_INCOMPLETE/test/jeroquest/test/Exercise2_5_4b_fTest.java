@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import jeroquest.boardgame.Dice;
 import jeroquest.boardgame.XYLocation;
+import jeroquest.gui.MyKeyboard;
 import jeroquest.logic.Game;
 import jeroquest.units.Character;
 import jeroquest.units.Hero;
@@ -38,11 +39,18 @@ class Exercise2_5_4b_fTest {
 		Game currentGame = new Game(1, 2, 1, 4, 20);
 
 		Character hero = currentGame.getCharacters().get(0);
+		System.out.print(currentGame);
 		currentGame.getBoard().movePiece(hero, new XYLocation(0, 3));
+		System.out.print(currentGame);
 		currentGame.getBoard().movePiece(currentGame.getCharacters().get(1), new XYLocation(0, 0));
+		System.out.print(currentGame);
 		currentGame.getBoard().movePiece(currentGame.getCharacters().get(2), new XYLocation(0, 1));
+		
+		System.out.print(currentGame);
+		MyKeyboard.pressEnter();
 
 		hero.resolveTurn(currentGame);
+		System.out.print(currentGame);
 		// the hero has attacked the monster at position (0,1), a Mummy who got one
 		// wound
 		assertEquals(1, currentGame.getCharacters().get(2).getBody());

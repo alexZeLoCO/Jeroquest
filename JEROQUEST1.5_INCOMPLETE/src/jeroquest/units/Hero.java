@@ -1,6 +1,7 @@
 package jeroquest.units;
 
 import jeroquest.boardgame.Dice;
+import jeroquest.logic.Game;
 
 /**
  * Programming Methodology Practice. Jeroquest - An example of Object Oriented
@@ -87,6 +88,16 @@ public abstract class Hero extends Character {
 		return wounds;
 	}
 
+	@Override
+	public void resolveTurn (Game currentGame) {
+		while (((Character) this).validTargets(currentGame)==null) {
+			// Move randomly through the board
+			this.actionMovement(currentGame);
+		}
+		// Attack to a random enemy
+		this.actionCombat(currentGame);
+	}
+	
 	/**
 	 * Get the name of the player controlling this hero
 	 * 

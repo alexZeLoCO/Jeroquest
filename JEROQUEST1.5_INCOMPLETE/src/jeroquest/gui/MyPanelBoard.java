@@ -104,7 +104,7 @@ public class MyPanelBoard extends JLayeredPane {
 				this.remove(comp);
 
 		// recreate the characters
-		for (Character cj : theGame.getCharacters())
+		for (Character cj : theGame.getCharacters().vectorNormal())
 			cj.show(this);
 
 		// If is is necessary to show anything else in the board, the code will be here

@@ -1,6 +1,7 @@
 package jeroquest.units;
 
 import jeroquest.boardgame.Dice;
+import jeroquest.logic.Game;
 
 /**
  * Programming Methodology Practice. Jeroquest - An example of Object Oriented
@@ -57,6 +58,14 @@ public abstract class Monster extends Character {
 		return wounds;
 	}
 
+	@Override
+	public void resolveTurn(Game currentGame) {
+		// Attack to a random enemy
+		actionCombat(currentGame);
+		// Move randomly through the board
+		actionMovement(currentGame);
+	}
+	
 	/**
 	 * Check if the character given as argument is an enemy of the current one. An
 	 * enemy will be all characters that are monsters (Overridden method)
