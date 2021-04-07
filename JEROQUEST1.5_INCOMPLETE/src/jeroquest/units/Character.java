@@ -282,12 +282,14 @@ public abstract class Character implements Piece, GraphicElement {
 		return false;
 	}
 
+
 	/**
 	 * Movement action for the character
 	 * 
 	 * @param currentGame game in which the character has to act
 	 * @return the number of squares that it has moved
 	 */
+
 	public int actionMovement(Game currentGame) {
 		// Random movement in the board
 		System.out.print(this.getName() + this.getPosition() + " moves to ");
@@ -319,32 +321,19 @@ public abstract class Character implements Piece, GraphicElement {
 		return this.getMovement() - mov;
 	}
 
+
+
 	/**
 	 * AI: character's Artificial Intelligence It does the actions in a given turn:
 	 * attack and movement
 	 * 
 	 * @param currentGame game in which the character has to act
 	 */
-	public void resolveTurn(Game currentGame) {
-		
-		if (this instanceof Hero) {
-			// Move randomly through the board
-			actionMovement(currentGame);
-					
-			while (validTargets(currentGame)==null) {
-				// Move randomly through the board
-				actionMovement(currentGame);
-			}
-			// Attack to a random enemy
-			actionCombat(currentGame);
-		} else {
-			// Attack to a random enemy
-			actionCombat(currentGame);
-			// Move randomly through the board
-			actionMovement(currentGame);
-		}
-		
 
+	public void resolveTurn(Game currentGame) {
+
+		actionMovement(currentGame);
+		
 		// Possibles improvement (among others):
 		// - Move towards the closest enemy / with less body points /...
 		// A.- First in Xs and later in Ys

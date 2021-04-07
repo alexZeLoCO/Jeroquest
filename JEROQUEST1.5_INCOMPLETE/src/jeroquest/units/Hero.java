@@ -1,7 +1,11 @@
 package jeroquest.units;
 
 import jeroquest.boardgame.Dice;
+import jeroquest.boardgame.XYLocation;
+import jeroquest.gui.MyKeyboard;
 import jeroquest.logic.Game;
+import jeroquest.logic.Jeroquest;
+import jeroquest.utils.DynamicVectorXYLocation;
 
 /**
  * Programming Methodology Practice. Jeroquest - An example of Object Oriented
@@ -90,14 +94,50 @@ public abstract class Hero extends Character {
 
 	@Override
 	public void resolveTurn (Game currentGame) {
-		while (validTargets(currentGame).isNull()) {
-			// Move randomly through the board
-			this.actionMovement(currentGame);
-		}
-		// Attack to a random enemy
-		this.actionCombat(currentGame);
+
+		// Move randomly through the board
+		this.actionMovement(currentGame);
+
 	}
-	
+
+	@Override
+	public int actionMovement (Game currentGame) {
+		// Random movement in the board
+		System.out.print(this.getName() + this.getPosition() + " moves to ");
+		DynamicVectorXYLocation validPositions = validPositions(currentGame);
+		int mov = this.getMovement();
+		boolean combat = false;
+		while ((validPositions.length() > 0) && (mov > 0) && !combat) {
+			// if it can it moves in a direction chosen randomly
+			XYLocation newPosition = validPositions.get(Dice.roll(validPositions.length()) - 1);
+			currentGame.getBoard().movePiece(this, newPosition);
+			mov--;
+			System.out.println(this.getPosition());
+
+			System.out.print(currentGame);
+			// window
+			Jeroquest.showGame();
+
+			if (!validTargets(currentGame).isNull() && !combat) {
+				combat=actionCombat(currentGame);
+				currentGame.getStatistics().increaseHA();
+			}
+
+			MyKeyboard.pressEnter();
+
+			validPositions = validPositions(currentGame);
+		}
+
+		if (Jeroquest.blocked(currentGame, this))
+			System.out.print("<<<BLOCKED");
+		System.out.println();
+		System.out.print(currentGame);
+		// window
+		Jeroquest.showGame();
+		MyKeyboard.pressEnter();
+
+		return this.getMovement() - mov;
+	}
 	/**
 	 * Get the name of the player controlling this hero
 	 * 

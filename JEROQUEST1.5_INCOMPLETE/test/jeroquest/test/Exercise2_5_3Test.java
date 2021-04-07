@@ -1,5 +1,5 @@
 package jeroquest.test;
-
+/*
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -54,4 +54,6 @@ class Exercise2_5_3Test {
 		}
 	}
 
+
 }
+ */

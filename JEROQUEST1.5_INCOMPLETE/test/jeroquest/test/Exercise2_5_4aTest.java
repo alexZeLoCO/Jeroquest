@@ -14,7 +14,7 @@ import jeroquest.units.Character;
 import jeroquest.units.Hero;
 import jeroquest.units.Weapon;
 import jeroquest.utils.DynamicVectorCharacters;
-
+/*
 class Exercise2_5_4aTest {
 
 	@Test
@@ -60,3 +60,4 @@ class Exercise2_5_4aTest {
 		return false;
 	}
 }
+*/
