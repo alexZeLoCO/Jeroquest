@@ -21,7 +21,6 @@ public class Jeroquest_Main {
 		// in a board of 7 by 10
 		// in 20 turns
 
-		
 		jq.newGame(3, 4, 7, 10, 20);
 		jq.toPlay();
 

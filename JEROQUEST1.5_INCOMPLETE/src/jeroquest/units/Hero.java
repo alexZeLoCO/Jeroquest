@@ -90,7 +90,7 @@ public abstract class Hero extends Character {
 
 	@Override
 	public void resolveTurn (Game currentGame) {
-		while (((Character) this).validTargets(currentGame)==null) {
+		while (validTargets(currentGame).isNull()) {
 			// Move randomly through the board
 			this.actionMovement(currentGame);
 		}

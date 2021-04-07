@@ -367,8 +367,7 @@ public abstract class Character implements Piece, GraphicElement {
 		DynamicVectorCharacters validTargets = new DynamicVectorCharacters();
 
 		for (int i=0;i<currentGame.getCharacters().length();i++) {
-			if (currentGame.getCharacters().get(i).isAlive() &&
-				isEnemy(currentGame.getCharacters().get(i)) &&
+			if (isEnemy(currentGame.getCharacters().get(i)) &&
 				isAtRange(currentGame.getCharacters().get(i).getPosition())) {
 				
 					validTargets.add(currentGame.getCharacters().get(i));
